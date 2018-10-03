@@ -30,6 +30,7 @@
 package filer
 
 import (
+	"io/ioutil"
 	"os"
 	"time"
 )
@@ -46,10 +47,11 @@ func Touch(name string) error {
 }
 
 func Append(name string, b []byte) error {
-	f, err := os.OpenFile(name, os.O_CREATE|os.O_APPEND, 0600)
+	f, err := os.OpenFile(name, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		return err
 	}
+	defer f.Close()
 	_, err = f.Write(b)
 	return err
 }
@@ -59,7 +61,17 @@ func Write(name string, b []byte) error {
 	if err != nil {
 		return err
 	}
+	defer f.Close()
 	_, err = f.Write(b)
 
 	return err
+}
+
+func Read(name string) []byte {
+	b, _ := ioutil.ReadFile(name)
+	return b
+}
+
+func Remove(name string) error {
+	return os.Remove(name)
 }
