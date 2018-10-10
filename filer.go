@@ -47,7 +47,7 @@ func Touch(name string) error {
 }
 
 func Append(name string, b []byte) error {
-	f, err := os.OpenFile(name, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
+	f, err := os.OpenFile(name, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0600)
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,6 @@ func Write(name string, b []byte) error {
 	}
 	defer f.Close()
 	_, err = f.Write(b)
-
 	return err
 }
 
